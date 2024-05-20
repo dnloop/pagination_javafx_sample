@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainContent" prefHeight="720.0" prefWidth="1480.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.dnloop.pagination_javafx_sample.ui.home.HomeView">
+    <top>
+        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+            <Button fx:id="btnLoadTable" onAction="#loadTable" text="Load Table">
+                <HBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </HBox.margin>
+            </Button>
+            <Button fx:id="btnClearTable" onAction="#clearTable" text="Clear Table">
+                <HBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </HBox.margin>
+            </Button>
+        </HBox>
+    </top>
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+            <Label fx:id="lbStatus" text="Loading Patients" visible="false">
+                <HBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </HBox.margin>
+            </Label>
+            <ProgressIndicator fx:id="pgStatus" prefHeight="20.0" prefWidth="20.0" visible="false">
+                <HBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </HBox.margin>
+            </ProgressIndicator>
+        </HBox>
+    </bottom>
+</BorderPane>

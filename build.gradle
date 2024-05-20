@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'io.github.dnloop'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '21'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    def openjfx_ver = '21.0.2'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    implementation 'org.instancio:instancio-core:4.6.0'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // JavaFX
+    implementation "org.openjfx:javafx:$openjfx_ver"
+    implementation "org.openjfx:javafx-fxml:$openjfx_ver"
+    implementation "org.openjfx:javafx-controls:$openjfx_ver"
+    // MVVMFX
+    implementation 'de.saxsys:mvvmfx:1.8.0'
+    implementation 'de.saxsys:mvvmfx-spring-boot:1.8.0'
+    implementation 'com.gluonhq:ignite-spring:1.2.2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
