@@ -3,6 +3,7 @@ package io.github.dnloop.pagination_javafx_sample.ui.patient;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import io.github.dnloop.pagination_javafx_sample.model.Patient;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Pagination;
@@ -38,5 +39,14 @@ public class PatientTableView implements Initializable, FxmlView<PatientTableVie
         assert searchField != null :
                 "fx:id=\"searchField\" was not injected: check your FXML file 'PatientTableView.fxml'.";
         assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'PatientTableView.fxml'.";
+
+        viewModel.setPagination(pagination);
+        table.setItems(viewModel.getPatientsList());
+        colName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getName()));
+    }
+
+    @FXML
+    public void searchPatient() {
+        viewModel.searchPatient(searchField.getText());
     }
 }

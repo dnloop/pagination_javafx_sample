@@ -39,22 +39,24 @@ public class PatientService {
     }
 
     @Async
-    public CompletableFuture<Void> saveAll(List<Patient> patients) {
-        log.debug("Batch insert patient: " + patients.size());
-        return CompletableFuture.runAsync(() -> repository.saveAll(patients));
+    public CompletableFuture<Page<Patient>> findByName(String name, Pageable pageable) {
+        log.debug("Page number: " + pageable.getPageNumber());
+        log.debug("Page size: " + pageable.getPageSize());
+        return CompletableFuture.completedFuture(repository.findByNameContainingIgnoreCaseOrderByName(name, pageable));
     }
 
     @Async
-    public CompletableFuture<Void> deleteAll() {
+    public void deleteAll() {
         log.debug("Delete all patients");
-        return CompletableFuture.runAsync(repository::deleteAll);
+        CompletableFuture.runAsync(repository::deleteAll);
     }
 
     @Async
     public CompletableFuture<Void> loadTable() {
-        log.debug("Insert all patients");
+        log.debug("Insert all patients (1000)");
         List<Patient> patients = Instancio.ofList(Patient.class)
                                           .size(1000)
+                                          .generate(field(Patient::getName), gen -> gen.string().length(3, 60))
                                           .ignore(field(Patient::getId))
                                           .create();
         return CompletableFuture.runAsync(() -> repository.saveAll(patients));

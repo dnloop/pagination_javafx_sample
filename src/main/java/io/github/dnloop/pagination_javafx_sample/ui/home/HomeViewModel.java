@@ -20,27 +20,35 @@ public class HomeViewModel implements ViewModel {
             FluentViewLoader.fxmlView(PatientTableView.class).load();
 
     public final Command loadTableCommand = new DelegateCommand(() -> new Action() {
-            @Override
-            protected void action() {
-                log.debug("Load table");
-                patientTuple.getViewModel().loadTableCommand.execute();
-            }
-        }, true);
+        @Override
+        protected void action() {
+            log.info("Load table");
+            patientTuple.getViewModel().getLoadTableCommand().execute();
+        }
+    });
 
     public final Command deleteTableCommand = new DelegateCommand(() -> new Action() {
-            @Override
-            protected void action() {
-                log.debug("Delete table");
-                patientTuple.getViewModel().deleteTableCommand.execute();
-            }
-        });
+        @Override
+        protected void action() {
+            log.info("Delete table");
+            patientTuple.getViewModel().getDeleteTableCommand().execute();
+        }
+    });
+
+    public Command updateListCommand = new DelegateCommand(() -> new Action() {
+        @Override
+        protected void action() {
+            log.debug("Update list");
+            patientTuple.getViewModel().getUpdateListCommand().execute();
+        }
+    });
 
 
     public Parent getPatientView() {
         return patientTuple.getView();
     }
 
-    public void setHomeViewReferece(HomeView homeView) {
+    public void setHomeViewReference(HomeView homeView) {
         patientTuple.getViewModel().setHomeViewReference(homeView);
     }
 }

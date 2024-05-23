@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 
-<BorderPane fx:id="mainContent" prefHeight="720.0" prefWidth="1480.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.dnloop.pagination_javafx_sample.ui.home.HomeView">
+<BorderPane fx:id="mainContent" prefHeight="640.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.dnloop.pagination_javafx_sample.ui.home.HomeView">
     <top>
         <HBox alignment="CENTER" BorderPane.alignment="CENTER">
             <Button fx:id="btnLoadTable" onAction="#loadTable" text="Load Table">
@@ -12,6 +15,7 @@
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </HBox.margin>
             </Button>
+            <Button fx:id="btnUpdateList" layoutX="659.0" layoutY="15.0" onAction="#updateList" text="Update List" />
             <Button fx:id="btnClearTable" onAction="#clearTable" text="Clear Table">
                 <HBox.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -21,7 +25,7 @@
     </top>
     <bottom>
         <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
-            <Label fx:id="lbStatus" text="Loading Patients" visible="false">
+            <Label fx:id="lbStatus" text="Loading Patients">
                 <HBox.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </HBox.margin>

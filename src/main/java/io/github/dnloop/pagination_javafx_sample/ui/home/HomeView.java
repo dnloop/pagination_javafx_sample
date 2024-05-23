@@ -20,6 +20,9 @@ public class HomeView implements Initializable, FxmlView<HomeViewModel> {
     private Button btnLoadTable;
 
     @FXML
+    private Button btnUpdateList;
+
+    @FXML
     private Label lbStatus;
 
     @FXML
@@ -38,6 +41,9 @@ public class HomeView implements Initializable, FxmlView<HomeViewModel> {
         homeViewModel.loadTableCommand.execute();
     }
 
+    @FXML
+    void updateList() { homeViewModel.updateListCommand.execute(); }
+
     @InjectViewModel
     private HomeViewModel homeViewModel;
 
@@ -47,6 +53,8 @@ public class HomeView implements Initializable, FxmlView<HomeViewModel> {
                 "fx:id=\"btnClearTable\" was not injected: check your FXML file 'PatientTableView.fxml'.";
         assert btnLoadTable != null :
                 "fx:id=\"btnLoadTable\" was not injected: check your FXML file 'PatientTableView.fxml'.";
+        assert btnUpdateList != null :
+                "fx:id=\"btnUpdateList\" was not injected: check your FXML file 'PatientTableView.fxml'.";
         assert lbStatus != null : "fx:id=\"lbStatus\" was not injected: check your FXML file 'PatientTableView.fxml'.";
         assert mainContent != null :
                 "fx:id=\"mainContent\" was not injected: check your FXML file 'PatientTableView.fxml'.";
@@ -64,4 +72,5 @@ public class HomeView implements Initializable, FxmlView<HomeViewModel> {
     public ProgressIndicator getProgressIndicator() {
         return pgStatus;
     }
+
 }

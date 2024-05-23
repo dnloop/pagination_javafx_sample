@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 
 @Entity
+@Table(name = "PATIENT", schema = "PUBLIC")
 public class Patient {
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -11,7 +12,7 @@ public class Patient {
     )
     @SequenceGenerator(name = "patient_sequence",
                        sequenceName = "PATIENT_SEQUENCE",
-                       allocationSize = 5
+                       allocationSize = 1000
     )
     @Id
     private Integer id;
