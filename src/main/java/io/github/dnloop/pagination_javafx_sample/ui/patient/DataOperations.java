@@ -53,6 +53,12 @@ public class DataOperations {
 
     private HomeView homeView;
 
+    /**
+     * Each task is used to bind its status to a progress indicator and a status message.
+     * In this current development stage it is a simple label that requires to be clicked in order
+     * to hide its last message. A more complex approach could be connect to a notification service
+     * with default timings.
+     */
     private Task<Void> loadTableTask() {
         return new Task<>() {
             @Override
@@ -79,6 +85,10 @@ public class DataOperations {
         };
     }
 
+    /**
+     * Once the task is completed it needs to be cleaned up by unbinding the progress indicator and
+     * setting the status from previous task.
+     */
     private void onTaskCleanup(String status) {
         homeView.getProgressIndicator().progressProperty().unbind();
         homeView.getProgressIndicator().setVisible(false);
@@ -94,6 +104,9 @@ public class DataOperations {
         }
     });
 
+    /**
+     * Binds a progress indicator to a task property before executing the task.
+     */
     private void bindProgressIndicator(ReadOnlyDoubleProperty progressProperty) {
         // bind progress indicator
         homeView.getProgressIndicator().progressProperty().unbind(); // just in case of multiple calls
@@ -167,7 +180,7 @@ public class DataOperations {
     }
 
     /**
-     * Create page with 50 elements. This is used for pagination without filtering.
+     * Create page with 50 elements. This is used for both types of pagination (unfiltered / filtered).
      */
     private void createPage(int index, String query) {
         log.debug("Current page: " + index);
@@ -216,6 +229,10 @@ public class DataOperations {
         }
     }, true);
 
+    /**
+     * Used to query observed value on text field, it can be used also as a stand-alone action.
+     * It sets the current page to 0 and performs a filtered search.
+     */
     public void searchPatient(String text) {
         log.debug("Called searchPatient: " + text);
         createPage(0, text);

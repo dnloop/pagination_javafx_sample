@@ -8,6 +8,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Pagination;
 
 
+/**
+ * I tried separating the view model from data operations but it didn't work well. It ended up being
+ * a simple getter / setter. This means there is too much coupling between view model and data operations.
+ */
 public class PatientTableViewModel implements ViewModel {
     public final DataOperations dataOperations = new DataOperations();
 
