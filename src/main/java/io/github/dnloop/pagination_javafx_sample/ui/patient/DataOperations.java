@@ -9,6 +9,7 @@ import io.github.dnloop.pagination_javafx_sample.support.BeanUtil;
 import io.github.dnloop.pagination_javafx_sample.support.PageableUtility;
 import io.github.dnloop.pagination_javafx_sample.ui.home.HomeView;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,16 +59,11 @@ public class DataOperations {
             protected Void call() {
                 var tableLoad = service.loadTable().exceptionally(e -> {
                     log.error("Failed to load patients: " + e.getMessage());
-                    Platform.runLater(() -> {
-                        homeView.getProgressIndicator().progressProperty().unbind();
-                        homeView.setStatus("Table loading failed");
-                    });
+                    Platform.runLater(() -> onTaskCleanup("Table loading failed"));
                     return null;
                 }).thenRun(() -> Platform.runLater(() -> {
-                    log.debug("Unbind progress indicator");
-                    homeView.getProgressIndicator().progressProperty().unbind();
-                    homeView.getProgressIndicator().setVisible(false);
-                    homeView.setStatus("Table loaded");
+                    log.debug("Unbind progress indicator [loadTableTask]");
+                    onTaskCleanup("Table loaded");
                 }));
 
                 try {
@@ -83,17 +79,55 @@ public class DataOperations {
         };
     }
 
+    private void onTaskCleanup(String status) {
+        homeView.getProgressIndicator().progressProperty().unbind();
+        homeView.getProgressIndicator().setVisible(false);
+        homeView.setStatus(status);
+    }
+
     public final Command loadTableCommand = new DelegateCommand(() -> new Action() {
         @Override
         protected void action() {
-            log.debug("Bind progress indicator and start thread");
-            // bind progress indicator
-            homeView.getProgressIndicator().progressProperty().unbind(); // just in case of multiple calls
-            homeView.getProgressIndicator().progressProperty().bind(loadTableTask().progressProperty());
-            homeView.getProgressIndicator().setVisible(true);
+            log.debug("[loadTableCommand] Bind progress indicator and start thread");
+            bindProgressIndicator(loadTableTask().progressProperty());
             new Thread(loadTableTask()).start();
         }
     });
+
+    private void bindProgressIndicator(ReadOnlyDoubleProperty progressProperty) {
+        // bind progress indicator
+        homeView.getProgressIndicator().progressProperty().unbind(); // just in case of multiple calls
+        homeView.getProgressIndicator().progressProperty().bind(progressProperty);
+        homeView.getProgressIndicator().setVisible(true);
+    }
+
+    private Task<Void> deleteTableTask() {
+        return new Task<>() {
+            @Override
+            protected Void call() {
+                var deleteTable = service.deleteAll().exceptionally(e -> {
+                    log.error("Failed to delete table: " + e.getMessage());
+                    Platform.runLater(() -> onTaskCleanup("Table delete failed"));
+                    return null;
+                }).thenRun(() -> Platform.runLater(() -> {
+                    log.debug("Unbind progress indicator [deleteTableTask]");
+                    patientsList.clear();
+                    pagination.setPageCount(1);
+                    onTaskCleanup("Table deleted");
+                }));
+
+                try {
+                    log.info("Deleting table");
+                    deleteTable.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    log.error("Failed to delete table: " + e.getMessage());
+                    log.debug(e.getMessage(), e);
+                }
+
+                return null;
+            }
+        };
+    }
 
     public final Command deleteTableCommand = new DelegateCommand(() -> new Action() {
         @Override
@@ -102,9 +136,10 @@ public class DataOperations {
             var result = confirmDialog.showAndWait();
             var filter = result.filter(buttonType -> buttonType == ButtonType.OK).isPresent();
             if (filter) {
-                homeView.setStatus("Table deleted");
-                patientsList.clear();
-                service.deleteAll();
+                log.debug("[deleteTableCommand] Bind progress indicator and start thread");
+                // bind progress indicator
+                bindProgressIndicator(deleteTableTask().progressProperty());
+                new Thread(deleteTableTask()).start();
             }
         }
     });
@@ -166,7 +201,7 @@ public class DataOperations {
                                        homeView.setStatus("No patients found");
                                        query = null;
                                        patientsList.clear();
-                                       pagination.setPageCount(0);
+                                       pagination.setPageCount(1);
                                    });
                                }
                            });
@@ -218,6 +253,4 @@ public class DataOperations {
      * It loads initial data and subsequent updates from database.
      */
     public Command getUpdateListCommand() { return updateList; }
-
-
 }

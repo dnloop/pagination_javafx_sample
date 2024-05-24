@@ -46,9 +46,9 @@ public class PatientService {
     }
 
     @Async
-    public void deleteAll() {
+    public CompletableFuture<Void> deleteAll() {
         log.debug("Delete all patients");
-        CompletableFuture.runAsync(repository::deleteAll);
+        return CompletableFuture.runAsync(repository::deleteAll);
     }
 
     @Async

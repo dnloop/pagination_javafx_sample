@@ -43,6 +43,8 @@ public class PatientTableView implements Initializable, FxmlView<PatientTableVie
         viewModel.setPagination(pagination);
         table.setItems(viewModel.getPatientsList());
         colName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getName()));
+        // keep an eye out on this method. It needs debouncing
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> viewModel.searchPatient(newValue));
     }
 
     @FXML
